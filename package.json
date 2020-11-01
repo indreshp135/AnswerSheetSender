@@ -1,0 +1,27 @@
+{
+  "name": "answersheetsender",
+  "version": "1.0.0",
+  "description": "Answer sheet Sending CLI",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/indreshp135/AnswerSheetSender.git"
+  },
+  "keywords": [
+    "AnswerSheet"
+  ],
+  "author": "INDRESH P",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/indreshp135/AnswerSheetSender/issues"
+  },
+  "homepage": "https://github.com/indreshp135/AnswerSheetSender#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "nodemailer": "^6.4.14"
+  }
+}
