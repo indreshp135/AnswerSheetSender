@@ -4,6 +4,15 @@ const nodemailer = require('nodemailer');
 require('dotenv').config();
 const directory = path.join( __dirname,'sheets');
 
+var transporter = nodemailer.createTransport({
+    service:'gmail',
+    pool:true,
+    auth: {
+        user: process.env.GMAIL,
+        pass: process.env.PASSWORD
+    }
+});
+
 fs.readdir(directory,(err,files)=>{
     if (err) {
         console.error("\x1b[31m","Could not list the directory.", err);
@@ -17,13 +26,6 @@ fs.readdir(directory,(err,files)=>{
             const regno = name.substr(0,9)
             const format = name.substr(-3,3)
             if(format==="pdf"){
-                var transporter = nodemailer.createTransport({
-                    service:'gmail',
-                    auth: {
-                        user: process.env.GMAIL,
-                        pass: process.env.PASSWORD
-                    }
-                });
                 const mailOptions = {
                     from: process.env.GMAIL,
                     to: regno+'@nitt.edu',
