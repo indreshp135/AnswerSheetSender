@@ -6,7 +6,7 @@ This repo can be used to send answer sheets to students
 
 ## Working 
 Download **NODEJS** and install.<br>
-In command prompt go to repective directory and clone the repo
+In command prompt go to respective directory and clone the repo
 ```sh
 git clone https://github.com/indreshp135/AnswerSheetSender
 ```
