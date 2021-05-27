@@ -1,17 +1,9 @@
 const path = require("path");
 const fs = require("fs");
-const nodemailer = require("nodemailer");
+const sgMail = require("@sendgrid/mail");
 require("dotenv").config();
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const directory = path.join(__dirname, "sheets");
-
-var transporter = nodemailer.createTransport({
-  service: "gmail",
-  pool: true,
-  auth: {
-    user: process.env.GMAIL,
-    pass: process.env.PASSWORD,
-  },
-});
 
 fs.readdir(directory, (err, files) => {
   if (err) {
@@ -27,18 +19,23 @@ fs.readdir(directory, (err, files) => {
       const format = name.substr(-3, 3);
       if (format === "pdf") {
         const mailOptions = {
-          from: process.env.GMAIL,
           to: regno + "@nitt.edu",
+          from: process.env.GMAIL,
           subject: process.env.SUBJECT,
+          text: "Check your answer sheet in attchments",
           attachments: [
             {
+              content: fs
+                .readFileSync(path.join(__dirname, "sheets", file))
+                .toString("base64"),
               filename: file,
-              path: path.join(__dirname, "sheets", file),
-              contentType: "application/pdf",
+              type: "application/pdf",
+              disposition: "attachment",
             },
           ],
         };
-        transporter.sendMail(mailOptions, (err) => {
+
+        sgMail.send(mailOptions, (err) => {
           if (err)
             console.error(
               "\x1b[34m",
@@ -47,9 +44,9 @@ fs.readdir(directory, (err, files) => {
               "file not sent to",
               "\x1b[36m",
               regno + "@nitt.edu",
-              err
+              err.response.body
             );
-          else
+          else {
             console.log(
               "\x1b[34m",
               file,
@@ -58,7 +55,8 @@ fs.readdir(directory, (err, files) => {
               "\x1b[36m",
               regno + "@nitt.edu"
             );
-          fs.unlinkSync(path.join(__dirname, "sheets", file));
+            fs.unlinkSync(path.join(__dirname, "sheets", file));
+          }
         });
       } else console.error("\x1b[34m", file, "\x1b[31m", "- Not in pdf format");
     });
